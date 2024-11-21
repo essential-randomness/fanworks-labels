@@ -1,0 +1,10 @@
+---
+import Layout from "../components/Layout.astro";
+
+const requestUrl = new URL(Astro.request.url);
+console.log(requestUrl);
+---
+
+<Layout title="hello">
+  Thanks for sharing {requestUrl.searchParams.get("text")}
+</Layout>

@@ -10,8 +10,11 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^4.16.13",
     "@astrojs/check": "^0.9.4",
+    "astro": "^4.16.13",
     "typescript": "^5.6.3"
+  },
+  "devDependencies": {
+    "@vite-pwa/astro": "^0.4.3"
   }
 }
