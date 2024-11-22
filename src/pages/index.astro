@@ -1,7 +1,42 @@
 ---
 import Layout from "../components/Layout.astro";
+import { createClient } from "../auth/client";
+import { SessionStore } from "../auth/storage";
+import { Agent } from "@atproto/api";
 
-console.log(Astro.request);
+if (Astro.request.method == "POST") {
+  const handle = (await Astro.request.formData()).get("handle")?.toString();
+  const oauthClient = await createClient();
+  const url = await oauthClient.authorize(handle!, {
+    scope: "atproto transition:generic",
+  });
+
+  console.log(url);
+  return Astro.redirect(url);
+}
+const sid = Astro.cookies.get("sid");
+console.log(sid);
+if (sid) {
+  const session = await new SessionStore().get(sid.value);
+  if (session) {
+    const agent = new Agent(session as any);
+    console.log(agent.did);
+  }
+}
 ---
 
-<Layout title="hello"> Hello fujin </Layout>
+<Layout title="hello">
+  <div class="session-form">
+    <form action="/" method="POST">
+      <input
+        type="text"
+        name="handle"
+        placeholder="Enter your handle (eg alice.bsky.social)"
+        required
+      />
+      <button type="submit">Log in</button>
+    </form>
+  </div>
+  Hello Fujin <br />
+  essentialrandom.bsky.social
+</Layout>
