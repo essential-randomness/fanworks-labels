@@ -22,3 +22,5 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+labels-server/labels.db-shm
+labels-server/labels.db-wal
