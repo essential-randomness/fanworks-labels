@@ -22,13 +22,19 @@ myServer.route({
     },
   },
   handler: (request, reply) => {
-    const post = "did:plc:r2vpg2iszskbkegoldmqa322";
+    const post =
+      "at://did:plc:r2vpg2iszskbkegoldmqa322/app.bsky.feed.post/3lbnfz5bmtk2b";
     console.log(post);
     const label = server.createLabel({
-      val: "fanfic",
-      uri: post,
+      val: "shitpost",
+      uri: "at://did:plc:r2vpg2iszskbkegoldmqa322/app.bsky.feed.post/3lbnfz5bmtk2b",
     });
     console.log(label);
+    const label2 = server.createLabel({
+      val: "shitpost",
+      uri: "did:plc:r2vpg2iszskbkegoldmqa322/app.bsky.feed.post/3lbnfz5bmtk2b",
+    });
+    console.log(label2);
     reply.send({ hello: "world" });
   },
 });

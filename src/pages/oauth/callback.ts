@@ -3,6 +3,7 @@ import { createClient } from "../../auth/client";
 import { SessionStore } from "../../auth/storage";
 import { Agent } from "@atproto/api";
 import { nanoid } from "nanoid";
+import { AuthSession, db } from "astro:db";
 
 export const GET: APIRoute = async ({ request, cookies }) => {
   const oauthClient = await createClient();
@@ -10,25 +11,19 @@ export const GET: APIRoute = async ({ request, cookies }) => {
   const { session } = await oauthClient.callback(url.searchParams);
 
   const agent = new Agent(session);
-  const profile = await agent.getProfile({ actor: agent.did! });
-  console.log("Bsky profile:", profile.data);
 
   const sid = nanoid();
-  await new SessionStore().set(sid, session as any);
-  cookies.set("sid", sid, {
-    httpOnly: true,
-    sameSite: "strict",
-    secure: true,
-    maxAge: 900000,
+  await db.insert(AuthSession).values({
+    key: sid,
+    session: JSON.stringify({did: agent.did!}),
   });
-  console.log(...cookies.headers());
 
-  console.log(sid);
+
   return new Response(null, {
     status: 302,
     headers: {
       Location: "/",
-      "Set-Cookie": `sid=${sid}; Max-Age=900000; HttpOnly; Secure; SameSite=Strict`,
+      "Set-Cookie": `sid=${sid}; Max-Age=900000; HttpOnly; Secure; SameSite=Strict; Path=/`,
     },
   });
 };

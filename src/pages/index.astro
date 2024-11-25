@@ -3,40 +3,59 @@ import Layout from "../components/Layout.astro";
 import { createClient } from "../auth/client";
 import { SessionStore } from "../auth/storage";
 import { Agent } from "@atproto/api";
+import { nanoid } from "nanoid";
+import { AuthSession, eq, db } from "astro:db";
+import type { ProfileViewDetailed } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
+import { undefined } from "astro:schema";
 
 if (Astro.request.method == "POST") {
   const handle = (await Astro.request.formData()).get("handle")?.toString();
   const oauthClient = await createClient();
+  const state = nanoid();
+  console.log("state", state);
   const url = await oauthClient.authorize(handle!, {
     scope: "atproto transition:generic",
+    state,
   });
 
-  console.log(url);
   return Astro.redirect(url);
 }
 const sid = Astro.cookies.get("sid");
-console.log(sid);
+let profile: ProfileViewDetailed | null = null;
 if (sid) {
-  const session = await new SessionStore().get(sid.value);
+  const sessionState = await db
+    .select()
+    .from(AuthSession)
+    .where(eq(AuthSession.key, sid.value))
+    .limit(1);
+  const oauthClient = await createClient();
+  const session = await oauthClient.restore(
+    JSON.parse(sessionState[0].session).did,
+  );
   if (session) {
-    const agent = new Agent(session as any);
-    console.log(agent.did);
+    const agent = new Agent(session);
+    profile = (await agent.getProfile({ actor: session.did })).data;
   }
 }
 ---
 
 <Layout title="hello">
   <div class="session-form">
-    <form action="/" method="POST">
-      <input
-        type="text"
-        name="handle"
-        placeholder="Enter your handle (eg alice.bsky.social)"
-        required
-      />
-      <button type="submit">Log in</button>
-    </form>
+    {
+      !profile && (
+        <form action="/" method="POST">
+          <input
+            type="text"
+            name="handle"
+            placeholder="Enter your handle (eg alice.bsky.social)"
+            required
+            value="essentialrandom.bsky.social"
+          />
+          <button type="submit">Log in</button>
+        </form>
+      )
+    }
   </div>
   Hello Fujin <br />
-  essentialrandom.bsky.social
+  {profile?.displayName ?? "no profile"}
 </Layout>
