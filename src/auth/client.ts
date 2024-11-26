@@ -7,7 +7,6 @@ import { JoseKey } from "@atproto/jwk-jose";
 export const createClient = async () => {
   const publicUrl = PUBLIC_URL;
   const url = publicUrl || `http://localhost:${PORT}`;
-  console.log(url);
   const enc = encodeURIComponent;
   return new NodeOAuthClient({
     clientMetadata: {

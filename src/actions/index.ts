@@ -28,13 +28,24 @@ export const server = {
       const url = new URL(input.post);
       const key = url.pathname.substring(url.pathname.lastIndexOf("/") + 1);
       try {
-        await agent.getPost({
+        const post = await agent.getPost({
           repo: agent.did,
           rkey: key,
         });
-        return `thanks ${did} for adding ${input.labels.join(", ")} to ${input.post} `;
+        const request = await fetch("http://127.0.0.1:14832/labels", {
+          method: "PUT",
+          body: JSON.stringify({
+            at_url: post.uri,
+            labels: input.labels,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        console.dir(request, { depth: null });
+        const addLabels = await request.json();
+        return `thank you for adding ${addLabels.added} and removing ${addLabels.removed} to ${input.post} `;
       } catch (e) {
-        console.log(e);
         throw new ActionError({
           code: "FORBIDDEN",
           message: "Post does not exist or is not yours",

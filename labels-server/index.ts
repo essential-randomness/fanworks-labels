@@ -1,46 +1,73 @@
 import { LabelerServer } from "@skyware/labeler";
-import fastify from "fastify";
+import fastify, { type FastifyRequest } from "fastify";
 import "dotenv/config";
+import { fetchCurrentLabels } from "./utils";
 
-const server = new LabelerServer({
+const labelerServer = new LabelerServer({
   did: process.env.LABELER_DID!,
   signingKey: process.env.SIGNING_KEY!,
 });
-const myServer = fastify();
+const labelingServer = fastify();
 
-myServer.route({
-  method: "GET",
+type BodyType = {
+  at_url: string;
+  labels: string[];
+};
+
+labelingServer.route({
+  method: "PUT",
   url: "/labels",
   schema: {
+    request: {
+      type: "object",
+      properties: {
+        at_url: {
+          type: "string",
+        },
+        labels: {
+          type: "array",
+        },
+      },
+    },
     response: {
       200: {
         type: "object",
         properties: {
-          hello: { type: "string" },
+          added: { type: "array" },
+          removed: { type: "array" },
         },
       },
     },
   },
-  handler: (request, reply) => {
-    const post =
-      "at://did:plc:r2vpg2iszskbkegoldmqa322/app.bsky.feed.post/3lbnfz5bmtk2b";
-    console.log(post);
-    const label = server.createLabel({
-      val: "shitpost",
-      uri: "at://did:plc:r2vpg2iszskbkegoldmqa322/app.bsky.feed.post/3lbnfz5bmtk2b",
-    });
-    console.log(label);
-    const label2 = server.createLabel({
-      val: "shitpost",
-      uri: "did:plc:r2vpg2iszskbkegoldmqa322/app.bsky.feed.post/3lbnfz5bmtk2b",
-    });
-    console.log(label2);
-    reply.send({ hello: "world" });
+  handler: (request: FastifyRequest<{ Body: BodyType }>, reply) => {
+    const body = request.body;
+
+    const currentLabels = fetchCurrentLabels(labelerServer, body.at_url);
+    const labelsToAdd = body.labels.filter(
+      (label) => !currentLabels.has(label)
+    );
+    const labelsToRemove = Array.from(
+      currentLabels.difference(new Set(body.labels))
+    );
+
+    for (const toAdd of labelsToAdd) {
+      labelerServer.createLabel({
+        uri: body.at_url,
+        val: toAdd,
+      });
+    }
+    for (const toRemove of labelsToRemove) {
+      labelerServer.createLabel({
+        uri: body.at_url,
+        val: toRemove,
+        neg: true,
+      });
+    }
+    reply.send({ added: labelsToAdd, removed: labelsToRemove });
   },
 });
 
-server.app.listen({ port: 14831 }, (error) => {
-  console.log("Here4");
+labelerServer.app.listen({ port: 14831 }, (error) => {
   if (error) {
     console.error("Failed to start server:", error);
   } else {
@@ -48,10 +75,10 @@ server.app.listen({ port: 14831 }, (error) => {
   }
 });
 
-myServer.listen({ port: 14832 }, (error) => {
+labelingServer.listen({ port: 14832 }, (error) => {
   if (error) {
     console.error("Failed to start server:", error);
   } else {
-    console.log("Labeler server running on port 14832");
+    console.log("Labeling server running on port 14832");
   }
 });

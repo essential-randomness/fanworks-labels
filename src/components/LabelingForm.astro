@@ -2,8 +2,6 @@
 import { actions, isInputError } from "astro:actions";
 
 const result = Astro.getActionResult(actions.postLabel);
-
-console.log(result);
 ---
 
 <form method="POST" action={actions.postLabel}>
