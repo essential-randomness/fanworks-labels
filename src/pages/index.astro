@@ -31,7 +31,7 @@ if (sid) {
   // console.log(JSON.parse(sessionState[0].session).did);
   const oauthClient = await createClient();
   const session = await oauthClient.restore(
-    JSON.parse(sessionState[0].session).did
+    JSON.parse(sessionState[0].session).did,
   );
   if (session) {
     const agent = new Agent(session);

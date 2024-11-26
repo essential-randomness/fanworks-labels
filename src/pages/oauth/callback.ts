@@ -18,12 +18,11 @@ export const GET: APIRoute = async ({ request, cookies }) => {
     session: JSON.stringify({did: agent.did!}),
   });
 
-
   return new Response(null, {
     status: 302,
     headers: {
       Location: "/",
-      "Set-Cookie": `sid=${sid}; Max-Age=900000; HttpOnly; Secure; SameSite=Strict; Path=/`,
+      "Set-Cookie": `sid=${sid}; Max-Age=900000; HttpOnly; Secure; SameSite=Lax; Path=/`,
     },
   });
 };
