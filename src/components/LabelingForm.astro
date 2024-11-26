@@ -1,0 +1,19 @@
+---
+import { actions, isInputError } from "astro:actions";
+
+const result = Astro.getActionResult(actions.postLabel);
+
+console.log(result);
+---
+
+<form method="POST" action={actions.postLabel}>
+  <label>Post URL:<input type="text" name="post" /></label>
+  {isInputError(result?.error) && <div>{result.error.fields.post}</div>}
+  <label><input type="checkbox" name="labels" value="fanfic" />Fanfic</label>
+  <label><input type="checkbox" name="labels" value="shitpost" />Shitpost</label
+  >
+  <button type="submit">Set Label</button>
+</form>
+
+{!isInputError(result?.error) && result?.error}
+{result?.data}

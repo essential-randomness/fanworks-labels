@@ -6,7 +6,7 @@ import { Agent } from "@atproto/api";
 import { nanoid } from "nanoid";
 import { AuthSession, eq, db } from "astro:db";
 import type { ProfileViewDetailed } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
-import { undefined } from "astro:schema";
+import LabelingForm from "../components/LabelingForm.astro";
 
 if (Astro.request.method == "POST") {
   const handle = (await Astro.request.formData()).get("handle")?.toString();
@@ -28,15 +28,17 @@ if (sid) {
     .from(AuthSession)
     .where(eq(AuthSession.key, sid.value))
     .limit(1);
+  // console.log(JSON.parse(sessionState[0].session).did);
   const oauthClient = await createClient();
   const session = await oauthClient.restore(
-    JSON.parse(sessionState[0].session).did,
+    JSON.parse(sessionState[0].session).did
   );
   if (session) {
     const agent = new Agent(session);
     profile = (await agent.getProfile({ actor: session.did })).data;
   }
 }
+// console.log(profile);
 ---
 
 <Layout title="hello">
@@ -58,4 +60,5 @@ if (sid) {
   </div>
   Hello Fujin <br />
   {profile?.displayName ?? "no profile"}
+  {profile && <LabelingForm />}
 </Layout>
