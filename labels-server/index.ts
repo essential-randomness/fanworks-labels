@@ -2,6 +2,7 @@ import { LabelerServer } from "@skyware/labeler";
 import fastify, { type FastifyRequest } from "fastify";
 import "dotenv/config";
 import { fetchCurrentLabels } from "./utils";
+import labelsConfig from "../labels";
 
 const labelerServer = new LabelerServer({
   did: process.env.LABELER_DID!,
@@ -42,6 +43,16 @@ labelingServer.route({
   handler: (request: FastifyRequest<{ Body: BodyType }>, reply) => {
     const body = request.body;
 
+    const hasExtraLabels = body.labels.some(
+      (label) =>
+        !labelsConfig.labels.find((configLabel) => label == configLabel.value)
+    );
+    if (hasExtraLabels) {
+      reply.status(500).send({
+        message: "You have extra labels",
+      });
+    }
+
     const currentLabels = fetchCurrentLabels(labelerServer, body.at_url);
     const labelsToAdd = body.labels.filter(
       (label) => !currentLabels.has(label)
@@ -63,6 +74,7 @@ labelingServer.route({
         neg: true,
       });
     }
+
     reply.send({ added: labelsToAdd, removed: labelsToRemove });
   },
 });
