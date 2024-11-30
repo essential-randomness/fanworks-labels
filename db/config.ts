@@ -1,4 +1,5 @@
-import { defineDb, defineTable, column } from "astro:db";
+import { defineDb, defineTable, column } from "astro:db"; 
+
 
 const BskyAuthSession = defineTable({
   columns: {
@@ -6,18 +7,23 @@ const BskyAuthSession = defineTable({
     session: column.text(),
   },
 });
+
 const BskyAuthState = defineTable({
   columns: {
     key: column.text({ primaryKey: true }),
     state: column.text(),
   },
 });
+
 const AuthSession = defineTable({
   columns: {
-    key: column.text({ primaryKey: true }),
-    session: column.text(),
+    id: column.text({ primaryKey: true }),
+    userDid: column.text(),
+    expiresAt: column.date(),
   },
 });
+ 
+
 
 // https://astro.build/db/config
 export default defineDb({

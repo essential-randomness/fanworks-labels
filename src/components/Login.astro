@@ -1,0 +1,31 @@
+---
+import { actions, isInputError } from "astro:actions";
+
+const result = Astro.getActionResult(actions.authorize);
+if (isInputError(result?.error)) {
+    console.log(result.error.fields.handle);
+} else if (result?.data) {
+    return Astro.redirect(result.data.redirectTo);
+}
+---
+
+<div class="session-form">
+    {
+        Astro.locals.session ? (
+            <form action={actions.logout} method="POST" data-astro-reload>
+                <button type="submit">Log out</button>
+            </form>
+        ) : (
+            <form action={actions.authorize} method="POST" data-astro-reload>
+                <input
+                    type="text"
+                    name="handle"
+                    placeholder="Enter your handle (eg alice.bsky.social)"
+                    required
+                    value="essentialrandom.bsky.social"
+                />
+                <button type="submit">Log in</button>
+            </form>
+        )
+    }
+</div>

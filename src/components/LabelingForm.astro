@@ -2,11 +2,11 @@
 import { actions, isInputError } from "astro:actions";
 import { ViewTransitions } from "astro:transitions";
 
-const result = Astro.getActionResult(actions.postLabel);
+const result = Astro.getActionResult(actions.labelPost);
 ---
 
 <ViewTransitions />
-<form method="POST" action={actions.postLabel}>
+<form method="POST" action={actions.labelPost}>
   <label>Post URL:<input transition:persist type="text" name="post" /></label>
   {isInputError(result?.error) && <div>{result.error.fields.post}</div>}
   <label>

@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
+    "dev": "astro dev --host",
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
@@ -16,6 +16,8 @@
     "@atproto/api": "^0.13.17",
     "@atproto/jwk-jose": "^0.1.2",
     "@atproto/oauth-client-node": "^0.2.1",
+    "@oslojs/crypto": "^1.0.1",
+    "@oslojs/encoding": "^1.1.0",
     "astro": "^4.16.13",
     "iron-session": "^8.0.4",
     "nanoid": "^5.0.8",

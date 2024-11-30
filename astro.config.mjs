@@ -24,7 +24,9 @@ export default defineConfig({
       },
     },
   },
-
+	security: {
+		checkOrigin: true
+	},
   integrations: [
     // AstroPWA({
     //   devOptions: {
