@@ -2,7 +2,7 @@
 import Layout from "../components/Layout.astro";
 import type { ProfileViewDetailed } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
 import LabelingForm from "../components/LabelingForm.astro";
-import { getBskyAgent } from "../auth/utils";
+import { getBskyAgent } from "../auth/client";
 import Login from "../components/Login.astro";
 import { actions, isInputError } from "astro:actions";
 
@@ -25,7 +25,6 @@ if (Astro.locals.session) {
 
 <Layout title="hello">
   <Login />
-  <h1>DO NOT USE THIS, IT NEEDS TO BE MADE MORE SECURE, THIS IS JUST A TEST</h1>
   Hello Fujin <br />
   {profile?.displayName ?? "no profile"}
   {profile && <LabelingForm />}

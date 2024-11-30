@@ -1,12 +1,5 @@
 ---
-import { actions, isInputError } from "astro:actions";
-
-const result = Astro.getActionResult(actions.authorize);
-if (isInputError(result?.error)) {
-    console.log(result.error.fields.handle);
-} else if (result?.data) {
-    return Astro.redirect(result.data.redirectTo);
-}
+import { actions } from "astro:actions";
 ---
 
 <div class="session-form">

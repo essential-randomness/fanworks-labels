@@ -1,6 +1,6 @@
 import { ActionError, defineAction } from "astro:actions";
 import { z } from "astro:schema";
-import { getBskyAgent } from "../auth/utils";
+import { getBskyAgent } from "../auth/client";
 
 
 export const labelPost = defineAction({

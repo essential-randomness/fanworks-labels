@@ -1,8 +1,8 @@
 import { ActionError, defineAction } from "astro:actions";
 import { z } from "astro:schema";
-import { createClient } from "../auth/client";
 import { nanoid } from "nanoid";
 import { deleteSessionTokenCookie, validateSessionToken } from "../auth/session";
+import { oauthClient } from "../auth/client";
 
 export const authorize = defineAction({
   accept: "form",
@@ -11,7 +11,6 @@ export const authorize = defineAction({
   }),
   handler: async (input) => {
     const handle = input.handle;
-    const oauthClient = await createClient();
     const state = nanoid();
     const url = await oauthClient.authorize(handle, {
       scope: "atproto transition:generic",
@@ -22,24 +21,23 @@ export const authorize = defineAction({
 });
 
 export const logout = defineAction({
-    accept: "form",
+  accept: "form",
   input: z.object({}),
   handler: async (_, ctx) => {
     const sessionToken = ctx.cookies.get("session")?.value;
     if (!sessionToken) {
-        throw new ActionError({
-            code: "BAD_REQUEST",
-            message: "Tried to logout without a session",
-          });
+      throw new ActionError({
+        code: "BAD_REQUEST",
+        message: "Tried to logout without a session",
+      });
     }
     const {session} = await validateSessionToken(sessionToken);
     if (!session) {
-        throw new ActionError({
-            code: "BAD_REQUEST",
-            message: "Tried to logout without a BSky session",
-          });
+      throw new ActionError({
+        code: "BAD_REQUEST",
+        message: "Tried to logout without a BSky session",
+      });
     }
-    const oauthClient = await createClient();
     oauthClient.revoke(session.userDid)
     deleteSessionTokenCookie(ctx.cookies);
     return "logged out";

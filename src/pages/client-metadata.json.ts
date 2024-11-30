@@ -1,6 +1,4 @@
-import { createClient } from "../auth/client";
-
-const oauthClient = await createClient();
+import { oauthClient } from "../auth/client";
 
 export async function GET(): Promise<Response> {
   const response = new Response(JSON.stringify(oauthClient.clientMetadata));

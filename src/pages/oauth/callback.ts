@@ -1,11 +1,10 @@
 import type { APIRoute } from "astro";
-import { createClient } from "../../auth/client";
 import { Agent } from "@atproto/api";
 import { generateSessionToken, createSession } from "../../auth/session.js";
+import { oauthClient } from "../../auth/client.js";
 
 
 export const GET: APIRoute = async ({ request, cookies }) => {
-  const oauthClient = await createClient();
   const url = new URL(request.url);
   const { session: oauthSession } = await oauthClient.callback(url.searchParams);
 
