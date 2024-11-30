@@ -1,32 +1,42 @@
 ---
 import { actions, isInputError } from "astro:actions";
 import { ViewTransitions } from "astro:transitions";
+import labelsConfig from "../../labels";
 
 const result = Astro.getActionResult(actions.labelPost);
+console.log(labelsConfig);
 ---
 
 <ViewTransitions />
 <form method="POST" action={actions.labelPost}>
   <label>Post URL:<input transition:persist type="text" name="post" /></label>
   {isInputError(result?.error) && <div>{result.error.fields.post}</div>}
-  <label>
-    <input
-      transition:persist
-      type="checkbox"
-      name="labels"
-      value="fanfic"
-    />Fanfic
-  </label>
-  <label>
-    <input
-      transition:persist
-      type="checkbox"
-      name="labels"
-      value="shitpost"
-    />Shitpost
-  </label>
+  {
+    labelsConfig.labels.map((label) => {
+      return (
+        <label>
+          <input
+            transition:persist
+            type="checkbox"
+            name="labels"
+            value={label.value}
+          />
+          {label.value}
+        </label>
+      );
+    })
+  }
   <button type="submit">Set Label</button>
 </form>
 
 {!isInputError(result?.error) && result?.error}
 {result?.data}
+
+<style>
+  form {
+    display: flex;
+    flex-direction: column;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+</style>
