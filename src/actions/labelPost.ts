@@ -37,11 +37,25 @@ export const labelPost = defineAction({
 
     const url = new URL(input.post);
     const key = url.pathname.substring(url.pathname.lastIndexOf("/") + 1);
+    let post:
+      | {
+          uri: string;
+          cid: string;
+          value: unknown;
+        }
+      | undefined;
     try {
-      const post = await agent.getPost({
+      post = await agent.getPost({
         repo: agent.did,
         rkey: key,
       });
+    } catch (e) {
+      throw new ActionError({
+        code: "FORBIDDEN",
+        message: "Post does not exist or is not yours",
+      });
+    }
+    try {
       const request = await fetch("http://127.0.0.1:14832/labels", {
         method: "PUT",
         body: JSON.stringify({
@@ -54,11 +68,11 @@ export const labelPost = defineAction({
       });
 
       const addLabels = await request.json();
-      return `thank you for adding ${addLabels.added} and removing ${addLabels.removed} to ${input.post}`;
+      return `Thank you for adding ${addLabels.added} and removing ${addLabels.removed} to ${input.post}`;
     } catch (e) {
       throw new ActionError({
-        code: "FORBIDDEN",
-        message: "Post does not exist or is not yours",
+        code: "INTERNAL_SERVER_ERROR",
+        message: "The labeler fucked up... oops!",
       });
     }
   },

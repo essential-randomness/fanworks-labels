@@ -1,4 +1,7 @@
 ---
+import Login from "./Login.astro";
+import "../styles/reset.css";
+
 // import { pwaInfo } from "virtual:pwa-info";
 
 export interface Props {
@@ -29,10 +32,55 @@ const { title } = Astro.props as Props;
     <script src="/src/pwa.ts"></script>
   </head>
   <body>
-    <main>
-      <article>
+    <div>
+      <header>
+        <a href="https://github.com/essential-randomness/fanworks-labels"
+          >GitHub Repo</a
+        ><Login />
+      </header>
+      <main>
         <slot />
-      </article>
-    </main>
+      </main>
+      <footer>
+        A project by <a href="https://www.fujocoded.com">FujoCoded LLC</a>.
+      </footer>
+    </div>
   </body>
 </html>
+
+<style>
+  :root {
+    --body-color: #e9d5ff;
+    --accent-color: #6b21a8;
+    font-size: 62.5%; /* Now 10px = 1rem! */
+  }
+  body {
+    background: var(--body-color);
+    padding: 0;
+  }
+  body > :first-child {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+    justify-content: space-between;
+  }
+  main {
+    flex-grow: 1;
+    padding: 2rem 3rem;
+  }
+  header {
+    border-bottom: 1px solid var(--accent-color);
+    padding: 0.5rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  footer {
+    border-top: 1px solid var(--accent-color);
+    padding: 0.5rem 1rem;
+    text-align: center;
+  }
+  :global(input) {
+    accent-color: var(--accent-color);
+  }
+</style>

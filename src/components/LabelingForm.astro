@@ -8,34 +8,74 @@ const result = Astro.getActionResult(actions.labelPost);
 
 <ViewTransitions />
 <form method="POST" action={actions.labelPost}>
-  <label>Post URL:<input transition:persist type="text" name="post" /></label>
-  {isInputError(result?.error) && <div>{result.error.fields.post}</div>}
-  {
-    labelsConfig.labels.map((label) => {
-      return (
-        <label>
-          <input
-            transition:persist
-            type="checkbox"
-            name="labels"
-            value={label.value}
-          />
-          {label.displayName}
-        </label>
-      );
-    })
-  }
+  <div>
+    <label>Post URL:<input transition:persist type="text" name="post" /></label>
+    {
+      isInputError(result?.error) && (
+        <div class="error">{result.error.fields.post}</div>
+      )
+    }
+    {
+      result?.data && (
+        <div>
+          <a href="">See post</a>
+        </div>
+      )
+    }
+  </div>
+  <fieldset>
+    <legend>Choose post labels</legend>
+    {
+      labelsConfig.labels.map((label) => {
+        return (
+          <label>
+            <input
+              transition:persist
+              type="checkbox"
+              name="labels"
+              value={label.value}
+            />
+            {label.displayName}
+          </label>
+        );
+      })
+    }
+  </fieldset>
+  {!isInputError(result?.error) && <div class="error">{result?.error}</div>}
   <button type="submit">Set Label</button>
 </form>
 
-{!isInputError(result?.error) && result?.error}
 {result?.data}
 
 <style>
   form {
     display: flex;
     flex-direction: column;
-    max-width: 300px;
+    max-width: 33rem;
     margin: 0 auto;
+    gap: 1rem;
+  }
+  label:has(input[type="text"]) {
+    display: flex;
+    width: 100%;
+    gap: 1rem;
+    align-items: center;
+
+    input {
+      flex-grow: 1;
+    }
+  }
+  fieldset {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(10rem, max-content));
+    border: 1px solid var(--accent-color);
+  }
+  label:has(input[type="checkbox"]) {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+  .error {
+    color: red;
   }
 </style>

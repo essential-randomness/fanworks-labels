@@ -1,24 +1,56 @@
 ---
 import { actions } from "astro:actions";
+import type { ProfileViewDetailed } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
+import { getBskyAgent } from "../auth/client";
+
+let profile: ProfileViewDetailed | null = null;
+if (Astro.locals.session) {
+  const agent = await getBskyAgent({ did: Astro.locals.session.userDid });
+  if (!agent) {
+    throw new Error("No agent found");
+  }
+  profile = (await agent.getProfile({ actor: agent.did! })).data;
+}
 ---
 
-<div class="session-form">
+<div
+  class:list={[
+    "session-form",
     {
-        Astro.locals.session ? (
-            <form action={actions.logout} method="POST" data-astro-reload>
-                <button type="submit">Log out</button>
-            </form>
-        ) : (
-            <form action={actions.authorize} method="POST" data-astro-reload>
-                <input
-                    type="text"
-                    name="handle"
-                    placeholder="Enter your handle (eg alice.bsky.social)"
-                    required
-                    value="essentialrandom.bsky.social"
-                />
-                <button type="submit">Log in</button>
-            </form>
-        )
-    }
+      "logged-in": Astro.locals.session,
+    },
+  ]}
+>
+  {
+    Astro.locals.session ? (
+      <div>
+        Welcome, {profile?.handle}!
+        <form action={actions.logout} method="POST" data-astro-reload>
+          <button type="submit">Log out</button>
+        </form>
+      </div>
+    ) : (
+      <form action={actions.authorize} method="POST" data-astro-reload>
+        <input
+          type="text"
+          name="handle"
+          placeholder="Enter your handle (eg alice.bsky.social)"
+          required
+          placeholder="fujocoded.bsky.social"
+          value={
+            import.meta.env.DEV ? "essentialrandom.bsky.social" : undefined
+          }
+        />
+        <button type="submit">Log in</button>
+      </form>
+    )
+  }
 </div>
+
+<style>
+  .logged-in > :first-child {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+</style>

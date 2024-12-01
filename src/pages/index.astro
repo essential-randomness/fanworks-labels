@@ -1,9 +1,6 @@
 ---
 import Layout from "../components/Layout.astro";
-import type { ProfileViewDetailed } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
 import LabelingForm from "../components/LabelingForm.astro";
-import { getBskyAgent } from "../auth/client";
-import Login from "../components/Login.astro";
 import { actions, isInputError } from "astro:actions";
 
 const result = Astro.getActionResult(actions.authorize);
@@ -12,20 +9,16 @@ if (isInputError(result?.error)) {
 } else if (result?.data) {
   return Astro.redirect(result.data.redirectTo);
 }
-
-let profile: ProfileViewDetailed | null = null;
-if (Astro.locals.session) {
-  const agent = await getBskyAgent({ did: Astro.locals.session.userDid });
-  if (!agent) {
-    throw new Error("No agent found");
-  }
-  profile = (await agent.getProfile({ actor: agent.did! })).data;
-}
 ---
 
 <Layout title="hello">
-  <Login />
-  Hello Fujin <br />
-  {profile?.displayName ?? "no profile"}
-  {profile && <LabelingForm />}
+  {Astro.locals.session && <LabelingForm />}
+  {
+    !Astro.locals.session && (
+      <section>
+        Welcome to the Fanworks labeler! Once you login, you will be able to add
+        labels to your posts according to the type of Fanwork they represent.
+      </section>
+    )
+  }
 </Layout>
