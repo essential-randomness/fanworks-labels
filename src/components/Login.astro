@@ -31,10 +31,9 @@ if (Astro.locals.session) {
       </div>
     ) : (
       <form action={actions.authorize} method="POST" data-astro-reload>
-        <input
+        Handle: <input
           type="text"
           name="handle"
-          placeholder="Enter your handle (eg alice.bsky.social)"
           required
           placeholder="fujocoded.bsky.social"
         />
