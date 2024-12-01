@@ -68,7 +68,7 @@ export const labelPost = defineAction({
       });
 
       const addLabels = await request.json();
-      return `Thank you for adding ${addLabels.added} and removing ${addLabels.removed} to ${input.post}`;
+      return `Thank you for adding ${addLabels.added.length ? addLabels.added : "nothing"} and removing ${addLabels.removed.length ? addLabels.removed : "nothing"} to ${input.post}`;
     } catch (e) {
       throw new ActionError({
         code: "INTERNAL_SERVER_ERROR",

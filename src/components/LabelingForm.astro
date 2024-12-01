@@ -15,13 +15,6 @@ const result = Astro.getActionResult(actions.labelPost);
         <div class="error">{result.error.fields.post}</div>
       )
     }
-    {
-      result?.data && (
-        <div>
-          <a href="">See post</a>
-        </div>
-      )
-    }
   </div>
   <fieldset>
     <legend>Choose post labels</legend>
@@ -51,7 +44,7 @@ const result = Astro.getActionResult(actions.labelPost);
   form {
     display: flex;
     flex-direction: column;
-    max-width: 33rem;
+    max-width: 35rem;
     margin: 0 auto;
     gap: 1rem;
   }
@@ -67,7 +60,7 @@ const result = Astro.getActionResult(actions.labelPost);
   }
   fieldset {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(10rem, max-content));
+    grid-template-columns: repeat(auto-fill, minmax(15rem, max-content));
     border: 1px solid var(--accent-color);
   }
   label:has(input[type="checkbox"]) {

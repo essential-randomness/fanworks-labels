@@ -24,3 +24,5 @@ pnpm-debug.log*
 .idea/
 labels-server/labels.db-shm
 labels-server/labels.db-wal
+
+nohup.out
