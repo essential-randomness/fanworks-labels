@@ -1,0 +1,16 @@
+{
+  "name": "labels-server",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "upload": "tsx ./index.ts"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@skyware/labeler": "^0.1.13",
+    "dotenv": "^16.4.5",
+    "tsx": "^4.19.2"
+  }
+}

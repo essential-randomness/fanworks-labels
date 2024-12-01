@@ -4,7 +4,6 @@ import { ViewTransitions } from "astro:transitions";
 import labelsConfig from "../../labels";
 
 const result = Astro.getActionResult(actions.labelPost);
-console.log(labelsConfig);
 ---
 
 <ViewTransitions />
@@ -21,7 +20,7 @@ console.log(labelsConfig);
             name="labels"
             value={label.value}
           />
-          {label.value}
+          {label.displayName}
         </label>
       );
     })
