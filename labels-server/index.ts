@@ -3,6 +3,8 @@ import fastify, { type FastifyRequest } from "fastify";
 import "dotenv/config";
 import { fetchCurrentLabels } from "./utils";
 import labelsConfig from "../labels";
+import sqlite3 from "sqlite3";
+const db = new sqlite3.Database("../feed-server/feed.sqlite");
 
 const labelerServer = new LabelerServer({
   did: process.env.LABELER_DID!,
@@ -73,6 +75,37 @@ labelingServer.route({
         val: toRemove,
         neg: true,
       });
+    }
+
+    if (currentLabels.size == 0 && labelsToAdd.length > 0) {
+      db.run(
+        "INSERT INTO post(uri, cid, indexedAt) VALUES ($uri, $cid, $indexedAt);",
+        {
+          $uri: body.at_url,
+          $cid: "whatever",
+          $indexedAt: new Date().toISOString(),
+        },
+        (e) => {
+          console.log(e);
+          console.log("Added post to feed");
+        }
+      );
+    }
+
+    if (
+      labelsToAdd.length == 0 &&
+      currentLabels.size == labelsToRemove.length
+    ) {
+      db.run(
+        "DELETE FROM post WHERE uri = $uri;",
+        {
+          $uri: body.at_url,
+        },
+        (e) => {
+          console.log(e);
+          console.log("Removed post from feed");
+        }
+      );
     }
 
     reply.send({ added: labelsToAdd, removed: labelsToRemove });

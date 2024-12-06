@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@skyware/labeler": "^0.1.13",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "sqlite3": "^5.1.7"
   }
 }
