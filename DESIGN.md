@@ -7,9 +7,15 @@ our labelING server.
 
 ![ALT](./architecture.excalidraw.png)
 
-# Phase 2 — Moderated labeler
+# Phase 2 — With Feeds
+
+In this phase we're going to add a feed for each type of label, plus a feed for every labeled post.
+
+![ALT](./architecture2.excalidraw.png)
+
+# Phase 3 — Moderated labeler
 
 In this phase, the label request is sent to a Discord server for
 approval and/or moderation.
 
-![ALT](./architecture2.excalidraw.png)
+![ALT](./architecture3.excalidraw.png)
