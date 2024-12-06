@@ -30,6 +30,10 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
 
   return {
     cursor,
-    feed,
+    feed: [
+      {
+        post: 'at://did:plc:kfs6qq5alv3klxr32zkmxbnv/app.bsky.feed.post/3lc7kytsqpc2s'
+      }
+    ],
   }
 }
