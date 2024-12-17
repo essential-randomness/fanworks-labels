@@ -3,6 +3,7 @@ import inquirer from 'inquirer'
 import { AtpAgent, BlobRef } from '@atproto/api'
 import fs from 'fs/promises'
 import { ids } from '../src/lexicon/lexicons'
+import labelsData from "../../labels";
 
 const run = async () => {
   dotenv.config()
@@ -31,33 +32,9 @@ const run = async () => {
         default: 'https://bsky.social',
         required: false,
       },
-      {
-        type: 'input',
-        name: 'recordName',
-        message: 'Enter a short name or the record. This will be shown in the feed\'s URL:',
-        required: true,
-      },
-      {
-        type: 'input',
-        name: 'displayName',
-        message: 'Enter a display name for your feed:',
-        required: true,
-      },
-      {
-        type: 'input',
-        name: 'description',
-        message: 'Optionally, enter a brief description of your feed:',
-        required: false,
-      },
-      {
-        type: 'input',
-        name: 'avatar',
-        message: 'Optionally, enter a local path to an avatar that will be used for the feed:',
-        required: false,
-      },
     ])
 
-  const { handle, password, recordName, displayName, description, avatar, service } = answers
+  const { handle, password, service } = answers
 
   const feedGenDid =
     process.env.FEEDGEN_SERVICE_DID ?? `did:web:${process.env.FEEDGEN_HOSTNAME}`
@@ -66,37 +43,43 @@ const run = async () => {
   const agent = new AtpAgent({ service: service ? service : 'https://bsky.social' })
   await agent.login({ identifier: handle, password})
 
-  let avatarRef: BlobRef | undefined
-  if (avatar) {
-    let encoding: string
-    if (avatar.endsWith('png')) {
-      encoding = 'image/png'
-    } else if (avatar.endsWith('jpg') || avatar.endsWith('jpeg')) {
-      encoding = 'image/jpeg'
-    } else {
-      throw new Error('expected png or jpeg')
-    }
-    const img = await fs.readFile(avatar)
-    const blobRes = await agent.api.com.atproto.repo.uploadBlob(img, {
-      encoding,
-    })
-    avatarRef = blobRes.data.blob
-  }
+  // let avatarRef: BlobRef | undefined
+  // if (avatar) {
+  //   let encoding: string
+  //   if (avatar.endsWith('png')) {
+  //     encoding = 'image/png'
+  //   } else if (avatar.endsWith('jpg') || avatar.endsWith('jpeg')) {
+  //     encoding = 'image/jpeg'
+  //   } else {
+  //     throw new Error('expected png or jpeg')
+  //   }
+  //   const img = await fs.readFile(avatar)
+  //   const blobRes = await agent.api.com.atproto.repo.uploadBlob(img, {
+  //     encoding,
+  //   })
+  //   avatarRef = blobRes.data.blob
+  // }
 
+  for (const label of labelsData.labels) {
   await agent.api.com.atproto.repo.putRecord({
     repo: agent.session?.did ?? '',
     collection: ids.AppBskyFeedGenerator,
-    rkey: recordName,
+    rkey: label.value,
     record: {
       did: feedGenDid,
-      displayName: displayName,
-      description: description,
-      avatar: avatarRef,
+      displayName: label.displayName,
+      description: `A feed to display fanworks labeled as ${label.displayName}`,
+      // avatar: avatarRef,
       createdAt: new Date().toISOString(),
     },
   })
 
-  console.log('All done 🎉')
+  console.log(`Created feed for ${label.displayName} 🎉`);
 }
+
+console.log('All done 🎉');
+
+}
+
 
 run()
