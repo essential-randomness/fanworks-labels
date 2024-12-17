@@ -19,6 +19,7 @@
     "@oslojs/crypto": "^1.0.1",
     "@oslojs/encoding": "^1.1.0",
     "astro": "^4.16.13",
+    "better-sqlite3": "^11.7.0",
     "iron-session": "^8.0.4",
     "nanoid": "^5.0.8",
     "typescript": "^5.6.3"
