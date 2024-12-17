@@ -45,5 +45,10 @@ export default {
       value: "zine",
       description: "This post has been marked as a fanvid",
     },
+    {
+      displayName: "🎤 Podfic",
+      value: "podfic",
+      description: "This post has been marked as a podfic",
+    },
   ],
 };
