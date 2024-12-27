@@ -2,6 +2,8 @@
 import Layout from "../components/Layout.astro";
 import LabelingForm from "../components/LabelingForm.astro";
 import { actions, isInputError } from "astro:actions";
+import Preview from "../images/preview.png";
+import { Image } from "astro:assets";
 
 const result = Astro.getActionResult(actions.authorize);
 if (isInputError(result?.error)) {
@@ -15,10 +17,53 @@ if (isInputError(result?.error)) {
   {Astro.locals.session && <LabelingForm />}
   {
     !Astro.locals.session && (
-      <section>
-        Welcome to the Fanworks labeler! Once you login, you will be able to add
-        labels to your posts according to the type of Fanwork they represent.
+      <section class="welcome">
+        <p>
+          Welcome to the Fanworks labeler! Once you login, you will be able to
+          add labels to your posts according to the type of Fanwork they
+          represent.
+        </p>
+        <figure>
+          <Image src={Preview} alt="Preview of the labeler" />
+          <figcaption>How our labeler looks</figcaption>
+        </figure>
+        <p>
+          You can follow our labeler at{" "}
+          <a href="https://bsky.app/profile/fanworkslabels.bsky.social">
+            fanworkslabels.bsky.social
+          </a>
+          , where you can also subscribe to different feeds for each label (or
+          <a href="https://bsky.app/profile/fanworkslabels.bsky.social/feed/all-labels">
+            one for all of them
+          </a>
+          ) and keep up with what our community is publishing!
+        </p>
       </section>
     )
   }
 </Layout>
+
+<style>
+  .welcome {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 800px;
+    margin: 0 auto;
+    gap: 15px;
+  }
+  :global(img) {
+    height: auto;
+    filter: grayscale(1);
+    border: 1px dashed black;
+    max-width: 70%;
+  }
+  figure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  figcaption {
+    font-size: smaller;
+  }
+</style>
