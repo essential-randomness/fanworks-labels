@@ -1,47 +1,56 @@
-# Astro Starter Kit: Minimal
+# BlueSky FanWorks Labeler + Feeds + Website
 
-```sh
-npm create astro@latest -- --template minimal
-```
+This project puts together a few BlueSky concepts in a single package. It allows
+people to:
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/minimal)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/minimal)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/minimal/devcontainer.json)
+- Create a labeler that people can subscribe to and that can apply labels to
+  specific posts
+- Create a website where people can submit posts with labels to add to them
+- Create multiple feeds, one for each label plus a global one
+- Add Discord moderation for the labels, holding back labeling until a post has
+  been reviewed
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+This codebase features a "fanworks labeler" where people can mark their posts as
+including a specific type of fanwork. You can check out the labeling site at
+[https://labelfanworks.fujocoded.com/](https://labelfanworks.fujocoded.com/) and
+the labeler + feeds at
+[https://bsky.app/profile/fanworkslabels.bsky.social](https://bsky.app/profile/fanworkslabels.bsky.social).
 
-## 🚀 Project Structure
+You can edit this codebase to create your own! If you need help, find us at
+[https://fujocoded.com](https://fujocoded.com).
 
-Inside of your Astro project, you'll see the following folders and files:
+## The Moving Parts
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+![Diagram of all the moving parts of the
+architecture](./architecture3.excalidraw.png)
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+### Labels configuration
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+Labels are configured in [./labels.ts](./blob/main/labels.ts). All other parts
+will read the configuration from this file and create the appropriate
+labels/feeds/options.
 
-Any static assets, like images, can be placed in the `public/` directory.
+### Labels Server
 
-## 🧞 Commands
+You can find the server for our labels in the
+[labels-server/](./blob/main/labels-server/) directory. It uses
+[@skyware/labeler](https://www.npmjs.com/package/@skyware/labeler) to create a
+server that serves labels according to the AtProto specification.
 
-All commands are run from the root of the project, from a terminal:
+### Feeds Server
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+You can find the server for our feeds in the
+[feed-server/](./blob/main/feed-server/) directory. It's a fork of [BlueSky's
+own feed generator template](https://github.com/bluesky-social/feed-generator).
 
-## 👀 Want to learn more?
+### Labeling Website
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+TODO: put it in its own folder
+
+### Discord Bot
+
+You can find our Discord bot in the [discord-bot/](./blob/main/feed-server/)
+directory. It uses [Discord.js](https://www.npmjs.com/package/discord.js) under
+the hood. You should refer to their Getting Started guide for instructions on
+[setting up your
+bot](https://discordjs.guide/preparations/setting-up-a-bot-application.html#creating-your-bot).
