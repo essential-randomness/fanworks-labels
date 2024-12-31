@@ -9,6 +9,7 @@ import { createDb, Database, migrateToLatest } from './db'
 import { FirehoseSubscription } from './subscription'
 import { AppContext, Config } from './config'
 import wellKnown from './well-known'
+import { addInternalRoutes } from './methods/internal'
 
 export class FeedGenerator {
   public app: express.Application
@@ -57,6 +58,7 @@ export class FeedGenerator {
     describeGenerator(server, ctx)
     app.use(server.xrpc.router)
     app.use(wellKnown(ctx))
+    addInternalRoutes(app, ctx)
 
     return new FeedGenerator(app, db, firehose, cfg)
   }

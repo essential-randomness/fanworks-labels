@@ -2,9 +2,7 @@ import { LabelerServer } from "@skyware/labeler";
 import fastify, { type FastifyRequest } from "fastify";
 import "dotenv/config";
 import { fetchCurrentLabels } from "./utils";
-import labelsConfig from "../labels";
-import sqlite3 from "sqlite3";
-const db = new sqlite3.Database("../feed-server/feed.sqlite");
+import labelsConfig from "../../labels";
 
 const labelerServer = new LabelerServer({
   did: process.env.LABELER_DID!,
@@ -45,6 +43,8 @@ labelingServer.route({
   handler: (request: FastifyRequest<{ Body: BodyType }>, reply) => {
     const body = request.body;
 
+    // Check whether the request includes labels that aren't present in our
+    // configuration and reject them.
     const hasExtraLabels = body.labels.some(
       (label) =>
         !labelsConfig.labels.find((configLabel) => label == configLabel.value)
@@ -55,6 +55,8 @@ labelingServer.route({
       });
     }
 
+    // Get the current labels for the requested post and determine which labels
+    // we're adding and which ones we're removing.
     const currentLabels = fetchCurrentLabels(labelerServer, body.at_url);
     const labelsToAdd = body.labels.filter(
       (label) => !currentLabels.has(label)
@@ -76,37 +78,16 @@ labelingServer.route({
         neg: true,
       });
     }
-
-    if (currentLabels.size == 0 && labelsToAdd.length > 0) {
-      db.run(
-        "INSERT INTO post(uri, cid, indexedAt) VALUES ($uri, $cid, $indexedAt);",
-        {
-          $uri: body.at_url,
-          $cid: "whatever",
-          $indexedAt: new Date().toISOString(),
-        },
-        (e) => {
-          console.log(e);
-          console.log("Added post to feed");
-        }
-      );
-    }
-
-    if (
-      labelsToAdd.length == 0 &&
-      currentLabels.size == labelsToRemove.length
-    ) {
-      db.run(
-        "DELETE FROM post WHERE uri = $uri;",
-        {
-          $uri: body.at_url,
-        },
-        (e) => {
-          console.log(e);
-          console.log("Removed post from feed");
-        }
-      );
-    }
+    fetch("http://127.0.0.1:14833/labels/", {
+      method: "PUT",
+      body: JSON.stringify({
+        uri: body.at_url,
+        labels: body.labels,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     reply.send({ added: labelsToAdd, removed: labelsToRemove });
   },

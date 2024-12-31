@@ -45,7 +45,10 @@ own feed generator template](https://github.com/bluesky-social/feed-generator).
 
 ### Labeling Website
 
-TODO: put it in its own folder
+You can find the labeling website in the
+[labeling-site/](./blob/main/labeling-site/) directory. This is an [Astro
+website](https://astro.build/) that uses OAuth to let people log in with their
+own BlueSky account and label their own posts.
 
 ### Discord Bot
 
