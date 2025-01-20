@@ -8,6 +8,8 @@ const createClient = async () => {
   if (!PUBLIC_URL) {
     throw new Error("PUBLIC_URL is not set but is required for oauth.");
   }
+  // TODO: make local OAuth work
+  // https://atproto.com/specs/oauth#clients
   return new NodeOAuthClient({
     clientMetadata: {
       client_name: "Fanworks Labels",
