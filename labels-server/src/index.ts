@@ -3,10 +3,23 @@ import fastify, { type FastifyRequest } from "fastify";
 import "dotenv/config";
 import { fetchCurrentLabels } from "./utils";
 import labelsConfig from "../../labels";
+import { z } from "zod";
+
+const ENVIRONMENT = z
+  .object({
+    FEED_SERVER_URL: z.string(),
+    LABELER_DID: z.string(),
+    LABELER_SIGNING_KEY: z.string(),
+    LABELER_SERVER_PORT: z.number({ coerce: true }),
+    LABELING_SERVER_PORT: z.number({ coerce: true }),
+    LABELER_DB_PATH: z.string().optional(),
+  })
+  .parse(process.env);
 
 const labelerServer = new LabelerServer({
-  did: process.env.LABELER_DID!,
-  signingKey: process.env.SIGNING_KEY!,
+  did: ENVIRONMENT.LABELER_DID,
+  signingKey: ENVIRONMENT.LABELER_SIGNING_KEY,
+  dbPath: ENVIRONMENT.LABELER_DB_PATH,
 });
 const labelingServer = fastify();
 
@@ -78,7 +91,7 @@ labelingServer.route({
         neg: true,
       });
     }
-    fetch("http://127.0.0.1:14833/labels/", {
+    fetch(new URL("/labels/", ENVIRONMENT.FEED_SERVER_URL), {
       method: "PUT",
       body: JSON.stringify({
         uri: body.at_url,
@@ -93,18 +106,22 @@ labelingServer.route({
   },
 });
 
-labelerServer.app.listen({ port: 14831 }, (error) => {
+labelerServer.app.listen({ port: ENVIRONMENT.LABELER_SERVER_PORT }, (error) => {
   if (error) {
     console.error("Failed to start server:", error);
   } else {
-    console.log("Labeler server running on port 14831");
+    console.log(
+      `Labeler server running on port ${ENVIRONMENT.LABELER_SERVER_PORT}`
+    );
   }
 });
 
-labelingServer.listen({ port: 14832 }, (error) => {
+labelingServer.listen({ port: ENVIRONMENT.LABELING_SERVER_PORT }, (error) => {
   if (error) {
     console.error("Failed to start server:", error);
   } else {
-    console.log("Labeling server running on port 14832");
+    console.log(
+      `Labeling server running on port ${ENVIRONMENT.LABELING_SERVER_PORT}`
+    );
   }
 });
