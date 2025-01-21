@@ -64,8 +64,8 @@ bot](https://discordjs.guide/preparations/setting-up-a-bot-application.html#crea
 - [x] Fix issue with Astro site and cookies
 - [ ] Test new feed server and migrate the one in production
 - [ ] Allow Discord Bot to label posts that are older than 2 hours
-- [ ] Add environment variables for server URLs
-- [ ] Add environment variables for database paths
+- [x] Add environment variables for server URLs
+- [x] Add environment variables for database paths
 - [ ] Add NixOS configuration
 - [ ] Set up a new one from scratch and write how to do it
 
