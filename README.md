@@ -61,7 +61,7 @@ bot](https://discordjs.guide/preparations/setting-up-a-bot-application.html#crea
 ## Remaining TODOs:
 
 - [x] Make local OAuth work
-- [ ] Fix issue with Astro site and cookies
+- [x] Fix issue with Astro site and cookies
 - [ ] Test new feed server and migrate the one in production
 - [ ] Allow Discord Bot to label posts that are older than 2 hours
 - [ ] Add environment variables for server URLs
