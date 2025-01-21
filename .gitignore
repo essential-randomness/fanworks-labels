@@ -28,3 +28,4 @@ labels-server/labels.db-wal
 
 nohup.out
 feed-server/feed.sqlite
+db/test.sql

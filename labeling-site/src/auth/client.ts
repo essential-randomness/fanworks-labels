@@ -4,19 +4,32 @@ import { SessionStore, StateStore } from "./storage.ts";
 import { JoseKey } from "@atproto/jwk-jose";
 import { Agent } from "@atproto/api";
 
+const ALLOWED_SCOPES = "atproto transition:generic";
+const REDIRECT_PATH = "/oauth/callback";
+
+// In local clients configuration for allowed scopes and redirects
+// is done through search params
+// See: https://atproto.com/specs/oauth#clients
+const LOCAL_SEARCH_PARAMS = new URLSearchParams({
+  scope: ALLOWED_SCOPES,
+  redirect_uri: new URL(REDIRECT_PATH, PUBLIC_URL).toString(),
+});
+const IS_DEVELOPMENT = process.env.NODE_ENV == "development";
+
 const createClient = async () => {
   if (!PUBLIC_URL) {
     throw new Error("PUBLIC_URL is not set but is required for oauth.");
   }
-  // TODO: make local OAuth work
-  // https://atproto.com/specs/oauth#clients
+
   return new NodeOAuthClient({
     clientMetadata: {
       client_name: "Fanworks Labels",
-      client_id: new URL("/client-metadata.json", PUBLIC_URL).toString(),
+      client_id: IS_DEVELOPMENT
+        ? `http://localhost?${LOCAL_SEARCH_PARAMS.toString()}`
+        : new URL("/client-metadata.json", PUBLIC_URL).toString(),
       client_uri: PUBLIC_URL,
-      redirect_uris: [new URL("/oauth/callback", PUBLIC_URL).toString()],
-      scope: "atproto transition:generic",
+      redirect_uris: [new URL(REDIRECT_PATH, PUBLIC_URL).toString()],
+      scope: ALLOWED_SCOPES,
       grant_types: ["authorization_code", "refresh_token"],
       response_types: ["code"],
       application_type: "web",
