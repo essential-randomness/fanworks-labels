@@ -5,6 +5,7 @@ import {
 } from "astro:actions";
 import { z } from "astro:schema";
 import { getBskyAgent } from "../auth/client";
+import { DISCORD_SERVER_URL, LABELING_SERVER_URL } from "astro:env/server";
 import labelsConfig from "../../../labels";
 
 const LABEL_POST_INPUT = z.object({
@@ -78,7 +79,7 @@ export const labelPost = defineAction({
         // The user asked to label their own post. This is allowed without
         // passing through Discord moderation.
         try {
-          const request = await fetch("http://127.0.0.1:14832/labels", {
+          const request = await fetch(new URL(`/labels`, LABELING_SERVER_URL), {
             method: "PUT",
             body: JSON.stringify({
               at_url: post.uri,
@@ -102,7 +103,7 @@ export const labelPost = defineAction({
         // through Discord moderation first.
         const profile = await agent.getProfile();
         try {
-          const request = await fetch("http://127.0.0.1:12000/message", {
+          const request = await fetch(new URL(`/message`, DISCORD_SERVER_URL), {
             method: "POST",
             body: JSON.stringify({
               post_url: url.toString(),

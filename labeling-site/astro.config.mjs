@@ -21,12 +21,20 @@ export default defineConfig({
           access: "public",
           optional: true,
         }),
+        DISCORD_SERVER_URL: envField.string({
+          context: "server",
+          access: "public",
+        }),
+        LABELING_SERVER_URL: envField.string({
+          context: "server",
+          access: "public",
+        }),
       },
     },
   },
-	security: {
-		checkOrigin: true
-	},
+  security: {
+    checkOrigin: true,
+  },
   integrations: [
     // AstroPWA({
     //   devOptions: {
