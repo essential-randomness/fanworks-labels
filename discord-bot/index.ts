@@ -5,7 +5,14 @@ import { z } from "zod";
 
 dotenv.config();
 
-const SERVER_PORT = 12000;
+const ENVIRONMENT = z
+  .object({
+    DISCORD_SERVER_PORT: z.number({ coerce: true }),
+    DISCORD_TOKEN: z.string(),
+    DISCORD_CHANNEL_ID: z.string(),
+    LABELING_SERVER_URL: z.string(),
+  })
+  .parse(process.env);
 
 // Create Discord client
 const client = new Client({
@@ -16,10 +23,10 @@ const client = new Client({
     GatewayIntentBits.GuildMessageReactions,
   ],
 });
-client.login(process.env.DISCORD_TOKEN);
+client.login(ENVIRONMENT.DISCORD_TOKEN);
 
 client.once(Events.ClientReady, () => {
-  console.log("I'm ready!");
+  console.log("Discord server ready to go!");
 });
 
 const requestValidator = z.object({
@@ -54,10 +61,12 @@ const server = httpServer.createServer(async (req, res) => {
   const data = requestValidator.parse(JSON.parse(body as string));
   //   console.log(data);
 
-  const channel = client.channels.cache.get(process.env.CHANNEL_ID!);
+  const channel = client.channels.cache.get(ENVIRONMENT.DISCORD_CHANNEL_ID);
   if (channel?.isSendable()) {
     const post = await channel?.send(
-      `Please approve labeling ${data.post_url} as ${data.labels.join(", ")} requested by ${data.requester}`
+      `Please approve labeling ${data.post_url} as ${data.labels.join(
+        ", "
+      )} requested by ${data.requester}`
     );
     await post.react(`✅`);
     await post.react(`❌`);
@@ -79,16 +88,19 @@ const server = httpServer.createServer(async (req, res) => {
         if (reaction.emoji.name! === "✅") {
           console.log("Approved!");
           // Send request to the labeling server to add the requested labels
-          const request = await fetch("http://127.0.0.1:14832/labels", {
-            method: "PUT",
-            body: JSON.stringify({
-              at_url: data.at_uri,
-              labels: data.labels,
-            }),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
+          const request = await fetch(
+            new URL("/labels", ENVIRONMENT.LABELING_SERVER_URL),
+            {
+              method: "PUT",
+              body: JSON.stringify({
+                at_url: data.at_uri,
+                labels: data.labels,
+              }),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
         } else {
           console.log("whomp whomp");
         }
@@ -102,7 +114,7 @@ const server = httpServer.createServer(async (req, res) => {
 });
 
 server.on("connect", () => {
-  console.log(`Server is listening on ${SERVER_PORT}`);
+  console.log(`Server is listening on ${ENVIRONMENT.DISCORD_SERVER_PORT}`);
 });
 
-server.listen(SERVER_PORT);
+server.listen(ENVIRONMENT.DISCORD_SERVER_PORT);
