@@ -101,9 +101,7 @@ in {
             };
 
             environment = {
-                PORT = builtins.toString cfg.port;
-                CURSOR_FILE_PATH = "${cfg.stateDir}/cursor.txt";
-                DB_PATH =  "${cfg.stateDir}/labels.db";
+                LABELER_DB_PATH =  "${cfg.stateDir}/labeler.db";
             };
 
             # this is where we can write a bash script to do everything we need 
