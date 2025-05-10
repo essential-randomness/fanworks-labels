@@ -24,6 +24,10 @@
       src = ./.;
       snowfall.namespace = "fujocoded";
 
+      systems.modules.nixos = with inputs; [
+     	 fanworks-labels-server.nixosModules.fanworks-labels-server
+      ];
+
       overlays = with inputs; [
 		# Use the overlay provided by this flake.
 		snowfall-flake.overlays.default
