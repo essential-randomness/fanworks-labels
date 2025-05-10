@@ -25,7 +25,7 @@
       snowfall.namespace = "fujocoded";
 
       systems.modules.nixos = with inputs; [
-     	 fanworks-labels-server.nixosModules.fanworks-labels-server
+     	 fanworks-labels.nixosModules.fanworks-labels
       ];
 
       overlays = with inputs; [
