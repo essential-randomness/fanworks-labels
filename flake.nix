@@ -28,6 +28,8 @@
 		# Use the overlay provided by this flake.
 		snowfall-flake.overlays.default
 	  ];
+
+	  debug = true;
     
 	};
 }

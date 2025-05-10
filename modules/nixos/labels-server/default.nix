@@ -76,7 +76,7 @@ in {
     config = mkIf cfg.enable {
         users = {
             users = optionalAttrs (cfg.user == "fanworks-labels-server") {
-                fujin-bsky-labeler = {
+                fanworks-labels-server = {
                     group = cfg.group;
                     home = cfg.stateDir;
                     isSystemUser = true;
