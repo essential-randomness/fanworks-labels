@@ -19,7 +19,7 @@ let
     inherit (lib) optional optionals optionalAttrs optionalString;
     cfg = config.services.fanworks-labels-server;
 in {
-    options.services.labels-server = {
+    options.services.fanworks-labels-server = {
         enable =
             lib.mkEnableOption "Fanworks feeds labels server"; 
 
@@ -68,7 +68,7 @@ in {
 
         package = mkOption {
             type = types.package;
-            default = pkgs.${namespace}.labels-server;
+            default = pkgs.${namespace}.fanworks-labels-server;
             description = "The labeler package to run";
         };
     };
