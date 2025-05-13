@@ -14,7 +14,7 @@ in
 
     src = lib.snowfall.fs.get-file "/labels-server/";
     
-    npmDepsHash = "sha256-FjmQNZc0SzLxq6AlCc/JrY/oKV2RoNE64G1Kk68F//w=";
+    npmDepsHash = "sha256-EIHnbYWrSkRiE5s1xpu4rK3rzefDtWwCg4XiGhfvf4Y=";
 
     nodejs = nodejs_22;
 
