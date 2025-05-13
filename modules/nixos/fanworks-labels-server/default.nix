@@ -68,7 +68,7 @@ in {
 
         package = mkOption {
             type = types.package;
-            default = pkgs.${namespace}.fanworks-labels-server;
+            default = pkgs.${namespace}.labels-server;
             description = "The labeler package to run";
         };
     };
