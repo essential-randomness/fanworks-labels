@@ -23,6 +23,6 @@ in
     nativeBuildInputs = [makeWrapper];
 
     postInstall = ''
-      makeWrapper ${nodejs_22}/bin/node $out/bin/fanworks-labels-server --add-flags $out/lib/node_modules/fanworks-labels-server/node_modules/.bin/tsx --add-flags $out/lib/node_modules/fanworks-labels-server/src/index.ts
+      makeWrapper ${nodejs_22}/bin/node $out/bin/fanworks-labels-server --add-flags $out/lib/node_modules/labels-server/node_modules/.bin/tsx --add-flags $out/lib/node_modules/labels-server/src/index.ts
     '';
   }
