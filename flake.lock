@@ -140,7 +140,8 @@
       "inputs": {
         "nixpkgs": "nixpkgs",
         "snowfall-flake": "snowfall-flake",
-        "snowfall-lib": "snowfall-lib_2"
+        "snowfall-lib": "snowfall-lib_2",
+        "unstable": "unstable"
       }
     },
     "snowfall-flake": {
@@ -223,6 +224,22 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "unstable": {
+      "locked": {
+        "lastModified": 1746663147,
+        "narHash": "sha256-Ua0drDHawlzNqJnclTJGf87dBmaO/tn7iZ+TCkTRpRc=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "dda3dcd3fe03e991015e9a74b22d35950f264a54",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
         "type": "github"
       }
     }

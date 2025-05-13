@@ -3,7 +3,8 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
-    
+    unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+ 
    snowfall-lib = {
        	url = "github:snowfallorg/lib";
        	inputs.nixpkgs.follows = "nixpkgs";
@@ -11,7 +12,6 @@
        
    snowfall-flake = {
 		url = "github:snowfallorg/flake";
-     # Instead of using its version of packages it uses the one that we have in inputs
 		inputs.nixpkgs.follows = "nixpkgs";
 	};
 
@@ -19,21 +19,11 @@
 
   outputs = inputs:
 	inputs.snowfall-lib.mkFlake {
-	      inherit inputs;
+	    inherit inputs;
 
       src = ./.;
+      
       snowfall.namespace = "fujocoded";
-
-      systems.modules.nixos = with inputs; [
-     	 fanworks-labels.nixosModules.fanworks-labels
-      ];
-
-      overlays = with inputs; [
-		# Use the overlay provided by this flake.
-		snowfall-flake.overlays.default
-	  ];
-
-	  debug = true;
     
 	};
 }

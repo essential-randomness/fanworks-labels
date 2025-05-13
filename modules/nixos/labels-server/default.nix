@@ -19,7 +19,7 @@ let
     inherit (lib) optional optionals optionalAttrs optionalString;
     cfg = config.services.fanworks-labels-server;
 in {
-    options.services.fanworks-labels-server = {
+    options.services.labels-server = {
         enable =
             lib.mkEnableOption "Fanworks feeds labels server"; 
 
@@ -68,7 +68,7 @@ in {
 
         package = mkOption {
             type = types.package;
-            default = pkgs.${namespace}.fanworks-labels-server;
+            default = pkgs.${namespace}.labels-server;
             description = "The labeler package to run";
         };
     };
@@ -101,7 +101,7 @@ in {
             };
 
             environment = {
-                LABELER_DB_PATH =  "${cfg.stateDir}/labeler.db";
+                LABELER_DB_PATH =  "${cfg.stateDir}/feed.sqlite";
             };
 
             # this is where we can write a bash script to do everything we need 
