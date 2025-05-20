@@ -45,7 +45,7 @@ in {
 
         user = mkOption {
             type = types.str;
-            default = "fanworks-feed-server";
+            default = "fanworks-labels-server";
             description = "User under which fanworks-feed-server is ran.";
         };
 
@@ -64,8 +64,8 @@ in {
   
     config = mkIf cfg.enable {
         users = {
-            users = optionalAttrs (cfg.user == "fanworks-feed-server") {
-                fanworks-feed-server = {
+            users = optionalAttrs (cfg.user == "fanworks-labels-server") {
+                fanworks-labels-server = {
                     group = cfg.group;
                     home = cfg.stateDir;
                     isSystemUser = true;
@@ -73,7 +73,7 @@ in {
             };
 
             groups =
-                optionalAttrs (cfg.group == "fanworks-feed-server") { fanworks-feed-server = { }; };
+                optionalAttrs (cfg.group == "fanworks-labels-server") { fanworks-labels-server = { }; };
         };
 
         systemd.services.fanworks-feed-server = {
