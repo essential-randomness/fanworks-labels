@@ -1,5 +1,5 @@
 {
-  "name": "feed-generator",
+  "name": "feed-server",
   "version": "1.0.0",
   "description": "atproto feed generator starter kit",
   "main": "index.js",
