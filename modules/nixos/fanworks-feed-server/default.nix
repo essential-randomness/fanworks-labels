@@ -37,7 +37,7 @@ in {
 
         stateDir = mkOption {
             type = types.str;
-            default = "/var/lib/fanworks-feed-server";
+            default = "/var/lib/fanworks-labels-server";
             description = ''
                 Where the database and cursor will be saved.
             '';
@@ -51,7 +51,7 @@ in {
 
         group = mkOption {
             type = types.str;
-            default = "fanworks-feed-server";
+            default = "fanworks-labels-server";
             description = "Group under which fanworks-feed-server is ran.";
         };
 
