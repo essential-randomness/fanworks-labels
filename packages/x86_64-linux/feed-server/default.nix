@@ -22,8 +22,6 @@ in
 
     npmConfigHook = importNpmLock.npmConfigHook;
 
-    npmFlags = [ "--ignore-scripts" ];
-
     nodejs = nodejs_22;
 
     dontNpmBuild = true;
