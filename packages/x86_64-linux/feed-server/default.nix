@@ -2,7 +2,7 @@
   lib,
   writeScriptBin,
   buildNpmPackage,
-  nodejs_22,
+  nodejs_20,
   makeWrapper,
   importNpmLock,
   ...
@@ -22,7 +22,7 @@ in
 
     npmConfigHook = importNpmLock.npmConfigHook;
 
-    nodejs = nodejs_22;
+    nodejs = nodejs_20;
 
     dontNpmBuild = true;
 
@@ -33,6 +33,6 @@ in
 	'';
 
     postInstall = ''
-      makeWrapper ${nodejs_22}/bin/node $out/bin/fanworks-feed-server --add-flags $out/lib/node_modules/feed-server/node_modules/.bin/tsx --add-flags $out/lib/node_modules/feed-server/src/index.ts
+      makeWrapper ${nodejs_20}/bin/node $out/bin/fanworks-feed-server --add-flags $out/lib/node_modules/feed-server/node_modules/.bin/tsx --add-flags $out/lib/node_modules/feed-server/src/index.ts
     '';
   }
