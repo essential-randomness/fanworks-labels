@@ -89,10 +89,6 @@ in {
                 RestartSec = 20;
             };
 
-            environment = {
-                FEEDGEN_SQLITE_LOCATION =  "${cfg.stateDir}/feed.sqlite";
-            };
-
             # this is where we can write a bash script to do everything we need 
             script = ''
 
