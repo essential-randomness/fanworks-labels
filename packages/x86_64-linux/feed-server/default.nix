@@ -31,7 +31,7 @@ in
     nativeBuildInputs = [makeWrapper];
 
 	postUnpack = ''
-		cp --no-preserve=mode ${labels} $sourceRoot/src/labels.ts
+		cp --no-preserve=mode ${labels} $sourceRoot/labels.ts
 	'';
 
     postInstall = ''
