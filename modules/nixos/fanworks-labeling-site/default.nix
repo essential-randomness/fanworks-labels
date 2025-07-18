@@ -35,6 +35,14 @@ in {
             description = "The port the labeling site should listen on.";
         };
 
+        stateDir = mkOption {
+            type = types.str;
+            default = "/var/lib/fanworks-labeling-site";
+            description = ''
+                Where the database and cursor will be saved.
+            '';
+        };
+
         user = mkOption {
             type = types.str;
             default = "fanworks-labeling-site";
