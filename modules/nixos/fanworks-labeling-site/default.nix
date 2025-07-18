@@ -45,13 +45,13 @@ in {
 
         user = mkOption {
             type = types.str;
-            default = "fanworks-labeling-site";
+            default = "fanworks-labels-server";
             description = "User under which fanworks-labeling-site is ran.";
         };
 
         group = mkOption {
             type = types.str;
-            default = "fanworks-labeling-site";
+            default = "fanworks-labels-server";
             description = "Group under which fanworks-labeling-site is ran.";
         };
 
