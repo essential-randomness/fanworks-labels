@@ -37,7 +37,7 @@ in {
 
         stateDir = mkOption {
             type = types.str;
-            default = "/var/lib/fanworks-labeling-site";
+            default = "/var/lib/fanworks-labels-server";
             description = ''
                 Where the database and cursor will be saved.
             '';
