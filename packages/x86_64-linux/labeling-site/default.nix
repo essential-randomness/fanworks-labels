@@ -35,6 +35,6 @@ in
 	'';
 
     postInstall = ''
-      makeWrapper ${nodejs_22}/bin/node $out/bin/fanworks-labeling-site --add-flags $out/lib/node_modules/labeling-site/node_modules/.bin/astro --add-flags "dev --host"
+      makeWrapper ${nodejs_22}/bin/node $out/bin/fanworks-labeling-site --add-flags $out/lib/node_modules/labeling-site/node_modules/.bin/astro --add-flags "dev --host --allowed-hosts=labelfanworks.fujocoded.com"
     '';
   }
