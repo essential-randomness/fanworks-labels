@@ -35,6 +35,13 @@ export default defineConfig({
   security: {
     checkOrigin: true,
   },
+
+  vite: {
+    server: {
+      allowedHosts: ["labelfanworks.fujocoded.com"],
+  },
+
+    
   integrations: [
     // AstroPWA({
     //   devOptions: {
