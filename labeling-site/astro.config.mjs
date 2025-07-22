@@ -38,10 +38,13 @@ export default defineConfig({
 
   vite: {
   	server: {
-      allowedHosts: ["labelfanworks.fujocoded.com"]
+      allowedHosts: true,
   	},
   },
 
+  server: {
+  	allowedHosts: true,
+  },
     
   integrations: [
     // AstroPWA({
