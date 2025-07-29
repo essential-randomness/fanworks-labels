@@ -36,12 +36,6 @@ export default defineConfig({
     checkOrigin: true,
   },
 
-  vite: {
-  	server: {
-      allowedHosts: ["labelfanworks.fujocoded.com"],
-  	},
-  },
-
   server: {
   	allowedHosts: ["labelfanworks.fujocoded.com"],
   },
