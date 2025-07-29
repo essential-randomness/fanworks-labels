@@ -38,12 +38,12 @@ export default defineConfig({
 
   vite: {
   	server: {
-      allowedHosts: true,
+      allowedHosts: ["labelfanworks.fujocoded.com"],
   	},
   },
 
   server: {
-  	allowedHosts: true,
+  	allowedHosts: ["labelfanworks.fujocoded.com"],
   },
     
   integrations: [
