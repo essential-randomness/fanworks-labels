@@ -8,30 +8,30 @@ import node from "@astrojs/node";
 // https://astro.build/config
 export default defineConfig({
   output: "server",
-  // experimental: {
-  //   env: {
-  //     schema: {
-  //       PORT: envField.number({
-  //         context: "server",
-  //         access: "public",
-  //         default: 4321,
-  //       }),
-  //       PUBLIC_URL: envField.string({
-  //         context: "server",
-  //         access: "public",
-  //         optional: true,
-  //       }),
-  //       DISCORD_SERVER_URL: envField.string({
-  //         context: "server",
-  //         access: "public",
-  //       }),
-  //       LABELING_SERVER_URL: envField.string({
-  //         context: "server",
-  //         access: "public",
-  //       }),
-  //     },
-  //   },
-  // },
+  experimental: {
+    env: {
+      schema: {
+        PORT: envField.number({
+          context: "server",
+          access: "secret",
+          default: 4321,
+        }),
+        PUBLIC_URL: envField.string({
+          context: "server",
+          access: "secret",
+          optional: true,
+        }),
+        DISCORD_SERVER_URL: envField.string({
+          context: "server",
+          access: "secret",
+        }),
+        LABELING_SERVER_URL: envField.string({
+          context: "server",
+          access: "secret",
+        }),
+      },
+    },
+  },
   security: {
     checkOrigin: true,
   },
