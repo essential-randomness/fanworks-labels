@@ -92,11 +92,13 @@ in {
             environment = {
                 LABELER_DB_PATH =  "${cfg.stateDir}/feed.sqlite";
                 __VITE_ADDITIONAL_SERVER_ALLOWED_HOSTS = "labelfanworks.fujocoded.com";
+                PUBLIC_URL = "labelfanworks.fujocoded.com";
             };
 
             # this is where we can write a bash script to do everything we need 
             script = ''
                 __VITE_ADDITIONAL_SERVER_ALLOWED_HOSTS=labelfanworks.fujocoded.com
+                PUBLIC_URL=labelfanworks.fujocoded.com
                 exec ${cfg.package}/bin/fanworks-labeling-site
             '';
         };
