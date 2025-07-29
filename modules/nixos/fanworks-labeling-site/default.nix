@@ -87,6 +87,7 @@ in {
                 WorkingDirectory = cfg.stateDir;
                 Restart = "always";
                 RestartSec = 20;
+                EnvironmentFile = "/var/lib/fanworks-labels-server/.env";
             };
 
             environment = {
