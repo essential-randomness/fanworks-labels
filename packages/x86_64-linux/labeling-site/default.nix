@@ -35,6 +35,6 @@ in
 	'';
 
     postInstall = ''
-      makeWrapper ${nodejs_22}/bin/node $out/bin/fanworks-labeling-site labelfanworks.fujocoded.com --add-flags $out/lib/node_modules/labeling-site/./dist/server/entry.mjs"
+      makeWrapper ${nodejs_22}/bin/node $out/bin/fanworks-labeling-site labelfanworks.fujocoded.com --add-flags $out/lib/node_modules/labeling-site/./dist/server/entry.mjs
     '';
   }
