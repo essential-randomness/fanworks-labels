@@ -14,7 +14,7 @@ export default defineConfig({
         PORT: envField.number({
           context: "server",
           access: "secret",
-          default: 4321,
+          default: 4322,
         }),
         PUBLIC_URL: envField.string({
           context: "server",
