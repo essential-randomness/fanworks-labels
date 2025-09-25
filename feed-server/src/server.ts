@@ -32,17 +32,6 @@ export class FeedGenerator {
 
   static create(cfg: Config) {
     const app = express()
-    console.log('&&&&&&&&&&&&&&&&&&&&&')
-        console.log('&&&&&&&&&&&&&&&&&&&&&')
-        console.log('&&&&&&&&&&&&&&&&&&&&&')
-        console.log('&&&&&&&&&&&&&&&&&&&&&')
-        console.log('&&&&&&&&&&&&&&&&&&&&&')
-        console.log(cfg.sqliteLocation)
-        console.log('&&&&&&&&&&&&&&&&&&&&&')
-        console.log('&&&&&&&&&&&&&&&&&&&&&')
-        console.log('&&&&&&&&&&&&&&&&&&&&&')
-        console.log('&&&&&&&&&&&&&&&&&&&&&')
-        console.log('&&&&&&&&&&&&&&&&&&&&&')
     const db = createDb(cfg.sqliteLocation)
     const firehose = new FirehoseSubscription(db, cfg.subscriptionEndpoint)
 
