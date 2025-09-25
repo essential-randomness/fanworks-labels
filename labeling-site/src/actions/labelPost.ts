@@ -6,7 +6,7 @@ import {
 import { z } from "astro:schema";
 import { getBskyAgent } from "../auth/client";
 import { DISCORD_SERVER_URL, LABELING_SERVER_URL } from "astro:env/server";
-import labelsConfig from "../../../labels";
+import labelsConfig from "../labels";
 
 const LABEL_POST_INPUT = z.object({
   post: z.string().url(),

@@ -2,7 +2,7 @@ import { LabelerServer } from "@skyware/labeler";
 import fastify, { type FastifyRequest } from "fastify";
 import "dotenv/config";
 import { fetchCurrentLabels } from "./utils";
-import labelsConfig from "../../labels";
+import labelsConfig from "./labels";
 import { z } from "zod";
 
 const ENVIRONMENT = z

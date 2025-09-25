@@ -1,9 +1,9 @@
 {
-  "name": "fanworks-labels",
+  "name": "labeling-site",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev --host",
+    "dev": "__VITE_ADDITIONAL_SERVER_ALLOWED_HOSTS=labelfanworks.fujocoded.com astro dev --host",
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
@@ -18,13 +18,12 @@
     "@atproto/oauth-client-node": "^0.2.1",
     "@oslojs/crypto": "^1.0.1",
     "@oslojs/encoding": "^1.1.0",
+    "@vite-pwa/astro": "^0.4.3",
     "astro": "^4.16.13",
     "better-sqlite3": "^11.7.0",
     "iron-session": "^8.0.4",
     "nanoid": "^5.0.8",
-    "typescript": "^5.6.3"
-  },
-  "devDependencies": {
-    "@vite-pwa/astro": "^0.4.3"
+    "typescript": "^5.6.3",
+    "vite": "^5.0.0"
   }
 }

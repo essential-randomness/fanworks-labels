@@ -13,21 +13,26 @@ export default defineConfig({
       schema: {
         PORT: envField.number({
           context: "server",
-          access: "public",
-          default: 4321,
+          access: "secret",
+          default: 4322,
         }),
         PUBLIC_URL: envField.string({
           context: "server",
-          access: "public",
+          access: "secret",
           optional: true,
+          default: "https://labelfanworks.fujocoded.com/",
         }),
         DISCORD_SERVER_URL: envField.string({
           context: "server",
-          access: "public",
+          access: "secret",
+          optional: true,
+          default: "http://127.0.0.1:12000",
         }),
         LABELING_SERVER_URL: envField.string({
           context: "server",
-          access: "public",
+          access: "secret",
+          optional: true,
+          default: "http://127.0.0.1:14832",
         }),
       },
     },
@@ -35,6 +40,11 @@ export default defineConfig({
   security: {
     checkOrigin: true,
   },
+
+  server: {
+  	allowedHosts: ["labelfanworks.fujocoded.com"],
+  },
+    
   integrations: [
     // AstroPWA({
     //   devOptions: {

@@ -5,7 +5,7 @@ import {
 } from '../lexicon/types/app/bsky/feed/getFeedSkeleton'
 import * as allLabels from './all-labels'
 import * as byLabel from './by-label'
-import labelsConfig from "../../../labels";
+import labelsConfig from "../../labels";
 
 type AlgoHandler = (ctx: AppContext, params: QueryParams) => Promise<AlgoOutput>
 
