@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   writeScriptBin,
   buildNpmPackage,
   nodejs_22,
@@ -9,22 +10,27 @@
 }:  let
     package-json = lib.importJSON (lib.snowfall.fs.get-file "./labels-server/package.json");
     labels = lib.snowfall.fs.get-file "./labels.ts";
+    nodejs = nodejs_22;
+    buildNpmPackageForNode = buildNpmPackage.override { inherit nodejs; };
+    importNpmLockForNode = pkgs.callPackages (pkgs.path + "/pkgs/build-support/node/import-npm-lock") {
+      callPackages = pkgs.lib.callPackagesWith (pkgs // { inherit nodejs; });
+    };
 in
-  buildNpmPackage {
+  buildNpmPackageForNode {
     pname = "fanworks-labels-server";
 	inherit (package-json) version;
 	
     src = lib.snowfall.fs.get-file "./labels-server";
 
-    npmDeps = importNpmLock {
+    npmDeps = importNpmLockForNode {
     	npmRoot = lib.snowfall.fs.get-file "./labels-server";
     };
 
-    npmConfigHook = importNpmLock.npmConfigHook;
+    npmConfigHook = importNpmLockForNode.npmConfigHook;
 
     npmFlags = [ "--ignore-scripts" ];
 
-    nodejs = nodejs_22;
+    inherit nodejs;
 
     dontNpmBuild = true;
 
@@ -35,6 +41,6 @@ in
 	'';
 
     postInstall = ''
-      makeWrapper ${nodejs_22}/bin/node $out/bin/fanworks-labels-server --add-flags $out/lib/node_modules/labels-server/node_modules/.bin/tsx --add-flags $out/lib/node_modules/labels-server/src/index.ts
+      makeWrapper ${nodejs}/bin/node $out/bin/fanworks-labels-server --add-flags $out/lib/node_modules/labels-server/node_modules/.bin/tsx --add-flags $out/lib/node_modules/labels-server/src/index.ts
     '';
   }

@@ -1,28 +1,34 @@
 {
   lib,
+  pkgs,
   writeScriptBin,
   buildNpmPackage,
-  nodejs_20,
+  nodejs_22,
   makeWrapper,
   importNpmLock,
   ...
 }:  let
     package-json = lib.importJSON (lib.snowfall.fs.get-file "./feed-server/package.json");
     labels = lib.snowfall.fs.get-file "./labels.ts";
+    nodejs = nodejs_22;
+    buildNpmPackageForNode = buildNpmPackage.override { inherit nodejs; };
+    importNpmLockForNode = pkgs.callPackages (pkgs.path + "/pkgs/build-support/node/import-npm-lock") {
+      callPackages = pkgs.lib.callPackagesWith (pkgs // { inherit nodejs; });
+    };
 in
-  buildNpmPackage {
+  buildNpmPackageForNode {
     pname = "fanworks-feed-server";
 	inherit (package-json) version;
 	
     src = lib.snowfall.fs.get-file "./feed-server";
 
-    npmDeps = importNpmLock {
+    npmDeps = importNpmLockForNode {
     	npmRoot = lib.snowfall.fs.get-file "./feed-server";
     };
 
-    npmConfigHook = importNpmLock.npmConfigHook;
+    npmConfigHook = importNpmLockForNode.npmConfigHook;
 
-    nodejs = nodejs_20;
+    inherit nodejs;
 
     dontNpmBuild = true;
 
@@ -33,6 +39,6 @@ in
 	'';
 
     postInstall = ''
-      makeWrapper ${nodejs_20}/bin/node $out/bin/fanworks-feed-server --add-flags $out/lib/node_modules/feed-server/node_modules/.bin/tsx --add-flags $out/lib/node_modules/feed-server/src/index.ts
+      makeWrapper ${nodejs}/bin/node $out/bin/fanworks-feed-server --add-flags $out/lib/node_modules/feed-server/node_modules/.bin/tsx --add-flags $out/lib/node_modules/feed-server/src/index.ts
     '';
   }
